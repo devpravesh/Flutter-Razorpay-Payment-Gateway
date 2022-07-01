@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forpionifty/LoginPage.dart';
+import 'package:forpionifty/view/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Loginpage(),
+      home: const profile(),
     );
   }
 }
