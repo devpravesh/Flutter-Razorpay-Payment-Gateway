@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:forpionifty/controller/signIn.dart';
 import 'package:forpionifty/utils/utilsForproj.dart';
@@ -33,7 +35,9 @@ class Loginpage extends StatelessWidget {
                   floatingLabelBehavior: FloatingLabelBehavior.auto),
             ),
             ElevatedButton(
-                onPressed: () => _control.signin(username.text, password.text),
+                onPressed: () async {
+                  _control.signin(username.text, password.text);
+                },
                 // _control.signin(username.toString(), password.toString()),
                 child: const Text("Login"))
           ]),
