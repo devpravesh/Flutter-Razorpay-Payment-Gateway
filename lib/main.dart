@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:forpionifty/LoginPage.dart';
+import 'package:forpionifty/payment.dart';
 
-void main() {
+void main()async {
   runApp(const MyApp());
 }
 
@@ -10,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Loginpage(),
+      home:  Loginpage(),
     );
   }
 }
