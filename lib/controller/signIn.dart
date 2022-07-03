@@ -3,23 +3,32 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:forpionifty/payment.dart';
+import 'package:forpionifty/view/student_id.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class SignInController extends GetxController {
-  RxBool isLoading = true.obs;
-  var response;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  RxBool isLoading = true.obs;
+  var qrImage;
+  var response;
+
   Future<void> signin(email, password) async {
     try {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      // .then((value) async {
+      // change the logic for routing after
+      // This function also reads the data from the Firebase
+      var checkPaymnet = await getPaymentStatus();
+      if (checkPaymnet) {
+        Get.offAll(() => StudentID());
+      } else {
         Get.offAll(() => RazorpayPage());
-      });
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
         Fluttertoast.showToast(msg: "Wrong Password");
@@ -39,6 +48,7 @@ class SignInController extends GetxController {
     var getId = FirebaseAuth.instance.currentUser!.uid;
     response = await _db.collection('Students').doc(getId.toString()).get();
     // print(response.data());
+    // log(response.data()!["Name"].toString());
     isLoading(false);
     return response.data()!['feepaid'];
   }

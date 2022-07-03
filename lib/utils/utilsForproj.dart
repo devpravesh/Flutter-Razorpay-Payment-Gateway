@@ -16,12 +16,12 @@ class UtilsForproj {
   Widget constSpace({required horizontal}) {
     if (horizontal) {
       return const SizedBox(
-        height: 10,
+        width: 10,
       );
     }
 
     return const SizedBox(
-      width: 10,
+      height: 10,
     );
   }
 }

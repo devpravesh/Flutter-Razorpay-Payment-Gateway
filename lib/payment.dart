@@ -12,42 +12,42 @@ class RazorpayPage extends StatefulWidget {
 }
 
 class _RazorpayPageState extends State<RazorpayPage> {
-  SignInController _control = SignInController();
+  SignInController _control = Get.find<SignInController>();
   static const platform = MethodChannel("razorpay_flutter");
 
   late Razorpay _razorpay;
   var amount = 100;
-  waitingFunc() async {
-    await _control.getPaymentStatus();
-  }
 
   @override
   void initState() {
     super.initState();
-    waitingFunc();
     _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Payment Page'),
-      ),
-      body: Obx(() => _control.isLoading.value
-          ? Center(child: CircularProgressIndicator())
-          : Center(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                  Text(_control.response.data()!["Name"]),
-                  ElevatedButton(
-                      onPressed: openCheckout, child: const Text('Open'))
-                ]))),
-    );
+        appBar: AppBar(
+          title: const Text('Payment Page'),
+        ),
+        bottomNavigationBar: BottomAppBar(
+            child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Pending Fee =" + _control.response.data()['fee'],
+              style: TextStyle(fontSize: 20),
+            ),
+            ElevatedButton(onPressed: openCheckout, child: const Text('Open'))
+          ],
+        )),
+        body: const Center(child: Text("Pay the fee to continue"))
+        // Obx(() => _control.isLoading.value
+        //     ? Center(child: CircularProgressIndicator())
+        //     :
+
+        );
   }
 
   @override
@@ -57,9 +57,11 @@ class _RazorpayPageState extends State<RazorpayPage> {
   }
 
   void openCheckout() async {
+    // Test with this card : 4111 1111 1111 1111
+
     var options = {
-      'key': 'rzp_live_ILgsfZCZoFIKMb',
-      'amount': amount,
+      'key': 'rzp_test_HgHQSj3tYGQCWc',
+      'amount': 10000,
       'name': 'Pionifty.',
       'description': 'Tejsingh',
       'retry': {'enabled': true, 'max_count': 1},
@@ -72,6 +74,9 @@ class _RazorpayPageState extends State<RazorpayPage> {
 
     try {
       _razorpay.open(options);
+      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     } catch (e) {
       debugPrint('Error: e');
     }

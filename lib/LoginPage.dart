@@ -3,11 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:forpionifty/controller/signIn.dart';
 import 'package:forpionifty/utils/utilsForproj.dart';
+import 'package:get/get.dart';
 
 class Loginpage extends StatelessWidget {
   Loginpage({Key? key}) : super(key: key);
 
-  SignInController _control = SignInController();
+  SignInController _control = Get.put(SignInController());
   final username = TextEditingController();
   final password = TextEditingController();
   @override
@@ -25,7 +26,7 @@ class Loginpage extends StatelessWidget {
                   label: Text('Username'),
                   floatingLabelBehavior: FloatingLabelBehavior.auto),
             ),
-            UtilsForproj().constSpace(horizontal: true),
+            UtilsForproj().constSpace(horizontal: false),
             TextFormField(
               controller: password,
               obscureText: true,
