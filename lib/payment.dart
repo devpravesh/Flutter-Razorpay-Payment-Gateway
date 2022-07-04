@@ -59,24 +59,26 @@ class _RazorpayPageState extends State<RazorpayPage> {
   void openCheckout() async {
     // Test with this card : 4111 1111 1111 1111
 
+    var name = _control.response.data()['Name'];
+    var contact = _control.response.data()['phone'];
     var options = {
       'key': 'rzp_test_HgHQSj3tYGQCWc',
-      'amount': 10000,
-      'name': 'Pionifty.',
-      'description': 'Tejsingh',
+      'amount': amount,
+      'name': name,
+      'description': 'Entry Fee',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
-      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+      'prefill': {'contact': contact, 'email': 'test@razorpay.com'},
       'external': {
         'wallets': ['paytm']
       }
     };
 
     try {
-      _razorpay.open(options);
       _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
       _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+      _razorpay.open(options);
     } catch (e) {
       debugPrint('Error: e');
     }
@@ -84,6 +86,8 @@ class _RazorpayPageState extends State<RazorpayPage> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Success Response: $response');
+    _control.updatePaymentStatus();
+
     Fluttertoast.showToast(
         msg: "SUCCESS: " + response.paymentId!,
         toastLength: Toast.LENGTH_SHORT);

@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:forpionifty/controller/signIn.dart';
 import 'package:forpionifty/utils/utilsForproj.dart';
+import 'package:forpionifty/view/edit.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -28,44 +29,55 @@ class StudentID extends StatelessWidget {
                     utils.constSpace(horizontal: false),
                     Center(
                       child: Container(
-                        width: 400,
+                        width: Get.width - 10,
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
                             color: Colors.deepPurple[300],
                             borderRadius: BorderRadius.circular(16)),
-                        child: Column(
+                        child: Wrap(
                           children: [
-                            QrImage(
-                                data: _controller.response.data()!.toString(),
-                                size: 200,
-                                dataModuleStyle: const QrDataModuleStyle(
-                                    dataModuleShape: QrDataModuleShape.square,
-                                    color: Colors.white),
-                                eyeStyle: const QrEyeStyle(
-                                    eyeShape: QrEyeShape.square,
-                                    color: Colors.white)),
-                            // _controller.generateQR(),
-                            // const Text(
-                            //   "OR CODE",
-                            //   style: TextStyle(color: Colors.white),
-                            // ),
-                            Text(
-                              _controller.response.data()!['Name'],
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 24),
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(_controller.response.data()!['academy'],
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18)),
-                                Text(_controller.response.data()!['phone'],
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18))
+                                QrImage(
+                                    data:
+                                        _controller.response.data()!.toString(),
+                                    size: 150,
+                                    dataModuleStyle: const QrDataModuleStyle(
+                                        dataModuleShape:
+                                            QrDataModuleShape.square,
+                                        color: Colors.white),
+                                    eyeStyle: const QrEyeStyle(
+                                        eyeShape: QrEyeShape.square,
+                                        color: Colors.white)),
+                                Column(
+                                  // mainAxisAlignment: MainAxisAlignment.,
+                                  children: [
+                                    // _controller.generateQR(),
+                                    // const Text(
+                                    //   "OR CODE",
+                                    //   style: TextStyle(color: Colors.white),
+                                    // ),
+                                    Text(
+                                      _controller.response.data()!['Name'],
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 24),
+                                    ),
+                                    utils.constSpace(horizontal: false),
+                                    Text(
+                                        _controller.response.data()!['academy'],
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.white,
+                                            fontSize: 18)),
+                                    utils.constSpace(horizontal: false),
+                                    Text(_controller.response.data()!['phone'],
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18))
+                                  ],
+                                ),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -78,7 +90,10 @@ class StudentID extends StatelessWidget {
                     utils.constSpace(horizontal: false),
                     ListTile(
                       title: Text("Edit Profile"),
-                      onTap: () => log("Academy change request"),
+                      onTap: () => Get.to(() => edit(
+                            name: _controller.response.data()['Name'],
+                            phone: _controller.response.data()['phone'],
+                          )),
                     ),
                   ],
                 ),

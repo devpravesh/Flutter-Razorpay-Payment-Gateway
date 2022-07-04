@@ -46,11 +46,30 @@ class SignInController extends GetxController {
   Future<bool> getPaymentStatus() async {
     isLoading(true);
     var getId = FirebaseAuth.instance.currentUser!.uid;
-    response = await _db.collection('Students').doc(getId.toString()).get();
+    response = await _db.collection('Students').doc(getId).get();
     // print(response.data());
     // log(response.data()!["Name"].toString());
     isLoading(false);
     return response.data()!['feepaid'];
+  }
+
+  updatePaymentStatus() async {
+    isLoading(true);
+    String getId = _auth.currentUser!.uid;
+    await _db.collection('Students').doc(getId).update({'feepaid': true});
+    isLoading(false);
+    Get.offAll(() => StudentID());
+  }
+
+  updateNameandPhone({required String name, required phone}) async {
+    isLoading(true);
+    String getId = _auth.currentUser!.uid;
+    await _db
+        .collection('Students')
+        .doc(getId)
+        .update({'Name': name, 'phone': phone});
+    Get.back();
+    isLoading(false);
   }
 
   @override
